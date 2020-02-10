@@ -1,0 +1,40 @@
+<div *ngIf='subjectFlag'>
+    Select Subject:
+<select (click)='getPapers($event.target.value)'>
+     <option value="0">Select</option>
+    <option *ngFor='let subject of subjects' value={{subject.subjectId}}>{{subject.subjectName}}</option>
+</select>
+</div>
+<div *ngIf='paperFlag'>
+    Select Paper:
+    <select (click)='getQuestions($event.target.value)'>
+        <option value="0">Select</option>
+    <option *ngFor='let test of tests' value={{test.testId}}>{{test.testName}}</option>
+    </select>
+</div>
+
+
+<div class="row" *ngIf='questionFlag'>
+    <div class="col-xs-12">
+        <table border="1">
+            <tr>
+                <th>Question No</th>
+                <th>Question </th>
+                <th>Option A</th>
+                <th>Option B</th>
+                <th>Option C</th>
+                <th>Option D</th>
+                <th>Correct Answer</th>
+            </tr>
+            <tr *ngFor="let question of questions; index as i">
+                <td>{{ i+1 }} </td>
+                <td>{{ question.question }} </td>
+                <td>{{ question.option_1 }} </td>
+                <td>{{ question.option_2 }} </td>
+                <td>{{ question.option_3 }} </td>
+                <td>{{ question.option_4 }} </td>
+                <td>{{ question.correct_answer }} </td>
+            </tr>
+        </table>
+    </div>
+</div>

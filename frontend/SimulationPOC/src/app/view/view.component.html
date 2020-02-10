@@ -1,0 +1,219 @@
+Select Subject:
+<select (click)='getPapers($event.target.value)'>
+     <option value="0">Select</option>
+    <option *ngFor='let subject of subjects' value={{subject.subjectId}}>{{subject.subjectName}}</option>
+</select>
+
+<div *ngIf='paperFlag'>
+    Select Paper:
+    <select (click)='getQuestions($event.target.value)'>
+        <option value="0">Select</option>
+    <option *ngFor='let test of tests' value={{test.testId}}>{{test.testName}}</option>
+    </select>
+</div>
+
+<div class="row" *ngIf='questionFlag'>
+    <div class="col-xs-12">
+        <table border="1">
+            <tr>
+                <th>Question No</th>
+                <th>Question </th>
+                <th>Option A</th>
+                <th>Option B</th>
+                <th>Option C</th>
+                <th>Option D</th>
+                <th>Correct Answer</th>
+            </tr>
+            <tr *ngFor="let question of questions; index as i">
+                <td>
+                {{i+1}}
+                </td>
+                <td>
+                <span *ngIf="enableEditIndex != i">{{ question.question }}</span>
+                <input type="text" [(ngModel)]="question.question" *ngIf="enableEdit && enableEditIndex == i"/>
+                </td>
+                <td>
+                <span *ngIf="enableEditIndex != i">{{ question.option_1 }}</span>
+                <input type="text" [(ngModel)]="question.option_1" *ngIf="enableEdit && enableEditIndex == i"/>
+                </td>
+                <td>
+                <span *ngIf="enableEditIndex != i">{{ question.option_2 }}</span>
+                <input type="text" [(ngModel)]="question.option_2" *ngIf="enableEdit && enableEditIndex == i"/>
+                </td>
+                <td>
+                <span *ngIf="enableEditIndex != i">{{ question.option_3 }}</span>
+                <input type="text" [(ngModel)]="question.option_3" *ngIf="enableEdit && enableEditIndex == i"/>
+                </td>
+                <td>
+                <span *ngIf="enableEditIndex != i">{{ question.option_4 }}</span>
+                <input type="text" [(ngModel)]="question.option_4" *ngIf="enableEdit && enableEditIndex == i"/>
+                </td>
+                <td>
+                <span *ngIf="enableEditIndex != i">{{ question.correct_answer }}</span>
+                <input type="text" [(ngModel)]="question.correct_answer" *ngIf="enableEdit && enableEditIndex == i"/>
+                </td>
+                
+                <td>
+                    <button *ngIf="enableEdit && enableEditIndex == i" (click)="enableEdit=false; cancel()" 
+                            class="btn page-secondary-action-btn btn btn-danger" >Cancel</button>
+                    
+                    <button *ngIf="enableEdit && enableEditIndex == i" id="saveBtn" 
+                            class="btn page-primary-action-btn btn btn-primary" (click)="saveSegment(question)" type="submit">Update</button>
+                    
+                    <button class="table-row-action edit-action btn btn-success" *ngIf="i != enableEditIndex || enableEditIndex == null" 
+                           (click)="enableEditMethod(i)">edit</button>
+
+                    <button class="btn btn-danger" type="button" value={{question.question_id}} 
+                                (click)='ondeleteQuestion($event.target.value)'>Delete</button>        
+                </td>
+                <!--<td>
+                    <button class="btn btn-success" type="button" value={{question.question_id}} (click)="enableEditMethod(i)" >Edit</button>
+                
+                    
+                </td>-->
+                <!--<td> <input class="form-control" type="text" id="userListName" [(ngModel)]="userList[index].name" name="userListName{{index}}"
+                        [readonly]="index >== initialArraySize" /></td>
+                </tr>-->
+
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="row" *ngIf='questionFlag'>
+    <div class="div col-xs-12">
+        <button class="btn btn-success" type="button" (click)="saveQuestionForm()">Add Question</button>
+    </div>
+    <div class="div col-xs-12" *ngIf='addFlag'>
+        <button class="btn btn-danger" type="button" (click)="cancelQuestionForm()">Cancel</button>
+    </div>
+</div>
+
+
+<!--<div class="row" *ngIf='addQuestionFlag'>
+    <div class="col-xs-12">
+        <table border="1">
+            <tr>
+                <th>Question No</th>
+                <th>Question </th>
+                <th>Option A</th>
+                <th>Option B</th>
+                <th>Option C</th>
+                <th>Option D</th>
+                <th>Correct Answer</th>
+            </tr>
+        </table>
+    </div>
+</div>-->
+
+<!--<div class="row">
+    <div class="col-xs-12">
+        <form (ngSubmit)="onAddQuestion(f)" #f="ngForm">
+            <div class="row">
+                <div class="col-sm-5 form-group">
+                    <label for="question">Question</label>
+                    <input type="text" id="question" 
+                    class="form-control"
+                    name="question"
+                    ngModel
+                    required
+                    >
+                </div>
+                <div class="col-sm-5 form-group">
+                    <label for=" option_1">Option A</label>
+                    <input type="text" id=" option_1" 
+                    class="form-control"
+                    name=" option_1"
+                    ngModel
+                    required
+                    >
+                </div>
+                <div class="col-sm-5 form-group">
+                    <label for=" option_2">Option B</label>
+                    <input type="text" id=" option_2" 
+                    class="form-control"
+                    name=" option_2"
+                    ngModel
+                    required
+                    >
+                </div>
+                <div class="col-sm-5 form-group">
+                    <label for=" option_3">Option C</label>
+                    <input type="text" id=" option_3" 
+                    class="form-control"
+                    name=" option_3"
+                    ngModel
+                    required
+                    >
+                </div>
+                <div class="col-sm-5 form-group">
+                    <label for=" option_4">Option D</label>
+                    <input type="text" id=" option_4" 
+                    class="form-control"
+                    name=" option_4"
+                    ngModel
+                    required
+                    >
+                </div>
+                <div class="col-sm-5 form-group">
+                    <label for="correct_answer">Correct answer</label>
+                    <input type="text" id="correct_answer" 
+                    class="form-control"
+                    name="correct_answer"
+                    ngModel
+                    required
+                    >
+                </div>
+        </form>
+    </div>
+</div>-->
+
+
+
+<div class="row" *ngIf='addFlag'>
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+        <div [hidden]="submitted" style="width: 400px;">
+            <form [formGroup]="addQuestionForm" #savequestion (ngSubmit)="saveQuestion(saveQuestion)">
+                <table>
+                    <div class="form-group">
+                        <label for="name">Question</label>
+                        <input type="text" class="form-control" formControlName="question" data-toggle="tooltip" data-placement="right" title="Enter Question">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Option A</label>
+                        <input type="text" class="form-control" formControlName="option_1" data-toggle="tooltip" data-placement="right" title="Enter Option A">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Option B</label>
+                        <input type="text" class="form-control" formControlName="option_2" data-toggle="tooltip" data-placement="right" title="Enter Option B">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Option C</label>
+                        <input type="text" class="form-control" formControlName="option_3" data-toggle="tooltip" data-placement="right" title="Enter Option C">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Option D</label>
+                        <input type="text" class="form-control" formControlName="option_4" data-toggle="tooltip" data-placement="right" title="Enter Option D">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Correct Answer</label>
+                        <input type="text" class="form-control" formControlName="correct_answer" data-toggle="tooltip" data-placement="right" title="Enter Correct Option">
+                    </div>
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </table>
+            </form>
+        </div>
+    </div>
+    <div class="col-sm-4"></div>
+</div>
+<!--<div class="row">  
+  <div class="col-sm-4"></div>  
+  <div class="col-sm-4">  
+      <div [hidden]="!submitted">  
+         <h4>Question Added SuccessFully!</h4>  
+         <button (click)="saveQuestionForm()" class='btn btn-primary'>Add More Question</button>  
+      </div>        
+  </div>  
+  <div class="col-sm-4"></div>  
+</div>  -->
